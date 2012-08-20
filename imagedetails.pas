@@ -21,11 +21,11 @@ type
 const
   Centimeter = 2.54;
 
-	DotsPerInch: array[TDotsPerInch] of Single = (
-  	120.0, 160.0, 240.0, 320.0);
+  DotsPerInch: array[TDotsPerInch] of Single = (
+    120.0, 160.0, 240.0, 320.0);
 
-	DotsPerCentimeter: array[TDotsPerInch] of Single = (
-  	120.0 / Centimeter, 160.0 / Centimeter, 240.0 / Centimeter,
+  DotsPerCentimeter: array[TDotsPerInch] of Single = (
+    120.0 / Centimeter, 160.0 / Centimeter, 240.0 / Centimeter,
     320 / Centimeter);
 
 type
@@ -47,25 +47,25 @@ implementation
 procedure TImageDetails.Resize;
 var
   Dots: Single;
-	I: TDotsPerInch;
+  I: TDotsPerInch;
 begin
   if DesiredWidth < MinSize  then
-  	DesiredWidth := MinSize
-	else if DesiredWidth > MaxSize  then
-		DesiredWidth := MaxSize;
+    DesiredWidth := MinSize
+  else if DesiredWidth > MaxSize  then
+    DesiredWidth := MaxSize;
   if (Width > 0) and (Height > 0) then
     DesiredHeight := DesiredWidth * (Height / Width)
-	else
-  	DesiredHeight := 0;
-	for I := Low(Sizes) to High(Sizes) do
-	begin
-		if UnitKind = ukInch then
+  else
+    DesiredHeight := 0;
+  for I := Low(Sizes) to High(Sizes) do
+  begin
+    if UnitKind = ukInch then
       Dots := DotsPerInch[I]
-		else
+    else
       Dots := DotsPerCentimeter[I];
-		Sizes[I].Width := Round(DesiredWidth * Dots);
-		Sizes[I].Height := Round(DesiredHeight * Dots);
-	end;
+    Sizes[I].Width := Round(DesiredWidth * Dots);
+    Sizes[I].Height := Round(DesiredHeight * Dots);
+  end;
 end;
 
 end.

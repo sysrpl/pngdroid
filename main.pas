@@ -16,40 +16,40 @@ uses
 
 type
   TMainForm = class(TForm)
-		OpenDialog: TOpenPictureDialog;
-		PreviewImage: TAlphaImage;
-		Banner: TImage;
-		Logo: TAlphaImage;
-		DirectoryDialog: TSelectDirectoryDialog;
-		Shadow: TAlphaImage;
-		SourceButton: TAlphaSpeedButton;
-		ProjectButton: TAlphaSpeedButton;
-		DetailsLabel: TLabel;
-		QuitButton: TButton;
-		DetailsBox: TScrollBox;
-		ProjectEdit: TEdit;
-		ProjectLabel: TLabel;
-		UnitsBox: TComboBox;
-		SizeEdit: TEdit;
-		BannerLabel: TLabel;
-		SizeLabel: TLabel;
-		UnitsLabel: TLabel;
-		ResizeButton: TButton;
-		SourceEdit: TEdit;
-		SourceLabel: TLabel;
+    OpenDialog: TOpenPictureDialog;
+    PreviewImage: TAlphaImage;
+    Banner: TImage;
+    Logo: TAlphaImage;
+    DirectoryDialog: TSelectDirectoryDialog;
+    Shadow: TAlphaImage;
+    SourceButton: TAlphaSpeedButton;
+    ProjectButton: TAlphaSpeedButton;
+    DetailsLabel: TLabel;
+    QuitButton: TButton;
+    DetailsBox: TScrollBox;
+    ProjectEdit: TEdit;
+    ProjectLabel: TLabel;
+    UnitsBox: TComboBox;
+    SizeEdit: TEdit;
+    BannerLabel: TLabel;
+    SizeLabel: TLabel;
+    UnitsLabel: TLabel;
+    ResizeButton: TButton;
+    SourceEdit: TEdit;
+    SourceLabel: TLabel;
     Platform: TPlatformLayout;
-		procedure FormCreate(Sender: TObject);
-		procedure FormDestroy(Sender: TObject);
-		procedure FormPaint(Sender: TObject);
-		procedure FormShow(Sender: TObject);
-		procedure SizeEditExit(Sender: TObject);
-		procedure SourceEditExit(Sender: TObject);
-		procedure UnitsBoxChange(Sender: TObject);
-		procedure SourceButtonClick(Sender: TObject);
-		procedure ProjectButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure SizeEditExit(Sender: TObject);
+    procedure SourceEditExit(Sender: TObject);
+    procedure UnitsBoxChange(Sender: TObject);
+    procedure SourceButtonClick(Sender: TObject);
+    procedure ProjectButtonClick(Sender: TObject);
     procedure ResizeButtonClick(Sender: TObject);
-		procedure QuitButtonClick(Sender: TObject);
-	private
+    procedure QuitButtonClick(Sender: TObject);
+  private
     FDetails: TImageDetails;
     FSettings: IFiler;
     procedure LoadSettings;
@@ -57,10 +57,10 @@ type
     function LoadThumbnail: Boolean;
     procedure FormatDetails;
     { Settings }
-	private
-		function GetDesiredSize: Single;
-		procedure SetDesiredSize(Value: Single);
-	public
+  private
+    function GetDesiredSize: Single;
+    procedure SetDesiredSize(Value: Single);
+  public
     property DesiredSize: Single read GetDesiredSize write SetDesiredSize;
   end;
 
@@ -80,13 +80,13 @@ procedure TMainForm.LoadSettings;
 const
   DefaultSize = 1;
 begin
-	FSettings := XmlSettingsLoad(AppName);
+  FSettings := XmlSettingsLoad(AppName);
   UnitsBox.ItemIndex := FSettings.ReadInt('units');
   DesiredSize := FSettings.ReadFloat('size', DefaultSize);
   SourceEdit.Text := FSettings.ReadStr('source');
   ProjectEdit.Text := FSettings.ReadStr('project');
   if UnitsBox.ItemIndex < 0 then
-  	UnitsBox.ItemIndex := 0;
+    UnitsBox.ItemIndex := 0;
 end;
 
 procedure TMainForm.SaveSettings;
@@ -102,7 +102,7 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 var
-	C: TColor;
+  C: TColor;
 begin
   FormCreateFooter(Self, QuitButton);
   C := ColorDefault(Self);
@@ -121,7 +121,7 @@ procedure TMainForm.FormPaint(Sender: TObject);
 var
   R: TRect;
 begin
-	R := DetailsBox.BoundsRect;
+  R := DetailsBox.BoundsRect;
   R.Top := 0;
   Canvas.Brush.Color := DetailsBox.Color;
   Canvas.FillRect(R);
@@ -142,7 +142,7 @@ end;
 
 function TMainForm.GetDesiredSize: Single;
 begin
-	Result := FDetails.DesiredWidth;
+  Result := FDetails.DesiredWidth;
 end;
 
 function ReduceDecimal(Value: Single): AnsiString;
@@ -151,12 +151,12 @@ var
 begin
   S := Format('%.3f', [Value]);
   if Pos(S, '.') > -1 then
-	begin
-		while S[Length(S)] = '0' do
-			SetLength(S, Length(S) - 1);
+  begin
+    while S[Length(S)] = '0' do
+      SetLength(S, Length(S) - 1);
     if  S[Length(S)] = '.' then
-			SetLength(S, Length(S) - 1);
-	end;
+      SetLength(S, Length(S) - 1);
+  end;
   Result := S;
 end;
 
@@ -165,10 +165,10 @@ var
   S: string;
 begin
   if Value < MinSize  then
-  	Value := MinSize
-	else if Value > MaxSize  then
-		Value := MaxSize;
-	Value := Round(Value * 1000) / 1000;
+    Value := MinSize
+  else if Value > MaxSize  then
+    Value := MaxSize;
+  Value := Round(Value * 1000) / 1000;
   S := ReduceDecimal(Value);
   SizeEdit.Text := S;
   Value := StrToFloat(S);
@@ -182,37 +182,37 @@ end;
 
 function TMainForm.LoadThumbnail: Boolean;
 
-	procedure CenterThumbnail;
-	const
-	  MaxSize = 160;
-	var
-	  X, Y: Integer;
-	  Scale: Single;
-	begin
-	  X := PreviewImage.Image.Width;
-	  Y := PreviewImage.Image.Height;
-	  if X > Y then
-	  begin
-	  	if X > MaxSize then
-	    	Scale := MaxSize / X
-			else
-	      Scale := 1;
-	    PreviewImage.Width := Round(X * Scale);
+  procedure CenterThumbnail;
+  const
+    MaxSize = 160;
+  var
+    X, Y: Integer;
+    Scale: Single;
+  begin
+    X := PreviewImage.Image.Width;
+    Y := PreviewImage.Image.Height;
+    if X > Y then
+    begin
+      if X > MaxSize then
+        Scale := MaxSize / X
+      else
+        Scale := 1;
+      PreviewImage.Width := Round(X * Scale);
       Scale := PreviewImage.Image.Height / PreviewImage.Image.Width;
-	    PreviewImage.Height := Round(PreviewImage.Width * Scale);
-	  end
-	  else
-		begin
-	  	if Y > MaxSize then
-	    	Scale := MaxSize / Y
-			else
-	      Scale := 1;
-	    PreviewImage.Height := Round(Y * Scale);
+      PreviewImage.Height := Round(PreviewImage.Width * Scale);
+    end
+    else
+    begin
+      if Y > MaxSize then
+        Scale := MaxSize / Y
+      else
+        Scale := 1;
+      PreviewImage.Height := Round(Y * Scale);
       Scale := PreviewImage.Image.Width / PreviewImage.Image.Height;
-	    PreviewImage.Width := Round(PreviewImage.Height * Scale);
-	  end;
-	  PreviewImage.Left := (DetailsBox.Width - PreviewImage.Width) div 2 - 6;
-	end;
+      PreviewImage.Width := Round(PreviewImage.Height * Scale);
+    end;
+    PreviewImage.Left := (DetailsBox.Width - PreviewImage.Width) div 2 - 6;
+  end;
 
 var
   Strings: TStrings;
@@ -222,19 +222,19 @@ begin
   PreviewImage.Hint := '';
   PreviewImage.Width := 0;
   PreviewImage.Height := 0;
-	S := Trim(SourceEdit.Text);
+  S := Trim(SourceEdit.Text);
   FDetails.Source := S;
-	SourceEdit.Text := S;
+  SourceEdit.Text := S;
   FDetails.Valid := False;
   if FileExists(S) then
   try
-		PreviewImage.ImageLoad(S);
+    PreviewImage.ImageLoad(S);
     Strings := TStringList.Create;
     try
       Strings.Add('File size');
-			Strings.Add(Format('%s bytes', [FloatToStrF(FileSize(S), ffNumber, 18, 0)]));
+      Strings.Add(Format('%s bytes', [FloatToStrF(FileSize(S), ffNumber, 18, 0)]));
       PreviewImage.Hint := Strings.Text;
-		finally
+    finally
       Strings.Free;
     end;
     FDetails.Valid := True;
@@ -242,17 +242,17 @@ begin
     FDetails.Width := PreviewImage.Image.Width;
     FDetails.Height := PreviewImage.Image.Height;
     if UnitsBox.ItemIndex = 0 then
-	    FDetails.UnitKind := ukInch
-		else
-	    FDetails.UnitKind := ukCentimeter;
+      FDetails.UnitKind := ukInch
+    else
+      FDetails.UnitKind := ukCentimeter;
     FDetails.Resize;
-	except
+  except
     { Ignore loading errors }
   end;
   if FDetails.Valid then
-	  CenterThumbnail
+    CenterThumbnail
   else
-	  DetailsLabel.Top := PreviewImage.Top;
+    DetailsLabel.Top := PreviewImage.Top;
   FormatDetails;
   Result := FDetails.Valid;
 end;
@@ -262,7 +262,7 @@ const
   Indent = '  ';
   UnitAffix: array[TUnitKind] of string = ('in', 'cm');
   DpiTitles: array[TDotsPerInch] of AnsiString =
-  	('low', 'medium', 'high', 'x-high');
+    ('low', 'medium', 'high', 'x-high');
 var
   Strings: TStrings;
   Size: TImageSize;
@@ -270,13 +270,13 @@ var
   I: TDotsPerInch;
 begin
   if FDetails.Valid then
-	begin
+  begin
     P := DetailsBox.VertScrollBar.Position;
     DetailsLabel.AutoSize := True;
     DetailsLabel.Align := alNone;
-		DetailsLabel.Alignment := taLeftJustify;
-		DetailsLabel.Layout := tlTop;
-	  DetailsLabel.Top := PreviewImage.Top + PreviewImage.Height + 8;
+    DetailsLabel.Alignment := taLeftJustify;
+    DetailsLabel.Layout := tlTop;
+    DetailsLabel.Top := PreviewImage.Top + PreviewImage.Height + 8;
     DetailsLabel.Left := 8;
     Strings := TStringList.Create;
     try
@@ -285,28 +285,28 @@ begin
       Strings.Add('Size');
       Strings.Add(Indent + IntToStr(FDetails.Width) + ' x ' + IntToStr(FDetails.Height));
       Strings.Add(Indent + Format('%s %s by %s %s', [
-      	ReduceDecimal(FDetails.DesiredWidth), UnitAffix[FDetails.UnitKind],
+        ReduceDecimal(FDetails.DesiredWidth), UnitAffix[FDetails.UnitKind],
         ReduceDecimal(FDetails.DesiredHeight), UnitAffix[FDetails.UnitKind]]));
       Strings.Add('Size at dpis');
       for I := Low(FDetails.Sizes) to High(FDetails.Sizes) do
-			begin
+      begin
         Size := FDetails.Sizes[I];
-      	Strings.Add(Indent + DpiTitles[I] +
-	        Format(' %d x %d', [Size.Width, Size.Height]));
-			end;
+        Strings.Add(Indent + DpiTitles[I] +
+          Format(' %d x %d', [Size.Width, Size.Height]));
+      end;
       DetailsLabel.Caption := Strings.Text;
     finally
-			Strings.Free;
+      Strings.Free;
     end;
     DetailsBox.VertScrollBar.Position := P;
-	end
+  end
   else
   begin
     DetailsLabel.Caption := '';;
     DetailsLabel.AutoSize := False;
     DetailsLabel.Align := alClient;
-		DetailsLabel.Alignment := taCenter;
-		DetailsLabel.Layout := tlCenter;
+    DetailsLabel.Alignment := taCenter;
+    DetailsLabel.Layout := tlCenter;
     DetailsLabel.Caption := 'No image';
   end;
 end;
@@ -315,23 +315,23 @@ end;
 
 procedure TMainForm.SizeEditExit(Sender: TObject);
 begin
-	DesiredSize := StrToFloatDef(SizeEdit.Text, FDetails.DesiredWidth);
+  DesiredSize := StrToFloatDef(SizeEdit.Text, FDetails.DesiredWidth);
 end;
 
 procedure TMainForm.SourceEditExit(Sender: TObject);
 var
   S: AnsiString;
 begin
-	S := Trim(SourceEdit.Text);
+  S := Trim(SourceEdit.Text);
   if S <> FDetails.Source then
-		LoadThumbnail;
+    LoadThumbnail;
 end;
 
 procedure TMainForm.UnitsBoxChange(Sender: TObject);
 begin
   if UnitsBox.ItemIndex = 0 then
     FDetails.UnitKind := ukInch
-	else
+  else
     FDetails.UnitKind := ukCentimeter;
   FDetails.Resize;
   FormatDetails;
@@ -339,18 +339,18 @@ end;
 
 procedure TMainForm.SourceButtonClick(Sender: TObject);
 begin
-	if OpenDialog.Execute then
+  if OpenDialog.Execute then
   begin
-  	SourceEdit.Text := OpenDialog.FileName;
-		LoadThumbnail;
+    SourceEdit.Text := OpenDialog.FileName;
+    LoadThumbnail;
   end;
 end;
 
 procedure TMainForm.ProjectButtonClick(Sender: TObject);
 begin
   if DirectoryExists(ProjectEdit.Text) then
-		DirectoryDialog.FileName := ProjectEdit.Text;
-	if DirectoryDialog.Execute then
+    DirectoryDialog.FileName := ProjectEdit.Text;
+  if DirectoryDialog.Execute then
   begin
     ProjectEdit.Text := DirectoryDialog.FileName;
   end;
@@ -358,7 +358,7 @@ end;
 
 procedure TMainForm.ResizeButtonClick(Sender: TObject);
 type
-	TDpiFolders = array[TDotsPerInch] of string;
+  TDpiFolders = array[TDotsPerInch] of string;
 
   function CheckSizes: Boolean;
   var
@@ -368,18 +368,18 @@ type
     for I := Low(FDetails.Sizes) to High(FDetails.Sizes) do
     begin
       if FDetails.Sizes[I].Width < 1 then
-      	Result := False
+        Result := False
       else if FDetails.Sizes[I].Height < 1 then
-      	Result := False;
+        Result := False;
       if not Result then
-      	Exit;
+        Exit;
     end;
   end;
 
-	function FindFolders(const Path: string; var Folders: TDpiFolders): Boolean;
+  function FindFolders(const Path: string; var Folders: TDpiFolders): Boolean;
   const
-  	DpiAffix: array[TDotsPerInch] of string = (
-  		'ldpi', 'mdpi', 'hdpi', 'xhdpi');
+    DpiAffix: array[TDotsPerInch] of string = (
+      'ldpi', 'mdpi', 'hdpi', 'xhdpi');
   var
     Valid: Boolean;
     A, B: string;
@@ -388,25 +388,25 @@ type
     Valid := False;
     A := PathAppend(Path, 'res');
     if not FolderExists(A) then
-			A := Path;
+      A := Path;
     for I := Low(Folders) to High(Folders) do
     begin
       B := PathAppend(A, 'drawable-' + DpiAffix[I]);
-			if FolderExists(B) then
+      if FolderExists(B) then
       begin
-      	Folders[I] := B;
+        Folders[I] := B;
         Valid := True;
       end
-			else
-				Folders[I] := '';
-		end;
+      else
+        Folders[I] := '';
+    end;
     Result := Valid;
   end;
 
 const
-	SourceInvalid = 'The source is not a valid png image file';
-	DestInvalid = 'The destination is not an Android project folder';
-	SizeInvalid = 'The desired size is too small';
+  SourceInvalid = 'The source is not a valid png image file';
+  DestInvalid = 'The destination is not an Android project folder';
+  SizeInvalid = 'The desired size is too small';
 var
   Folders: TDpiFolders;
   Bitmap: TAlphaBitmap;
@@ -420,10 +420,10 @@ begin
   F := ExtractFileName(SourceEdit.Text);
   for I := Low(Folders) to High(Folders) do
   begin
-		S := Folders[I];
+    S := Folders[I];
     if S = '' then
-    	Continue;
-  	Size := FDetails.Sizes[I];
+      Continue;
+    Size := FDetails.Sizes[I];
     Bitmap := PreviewImage.Image.Resize(Size.Width, Size.Height);
     try
       Bitmap.SaveToFile(PathAppend(Folders[I], F));
@@ -431,13 +431,13 @@ begin
       Bitmap.Free;
     end;
   end;
-	SaveSettings;
+  SaveSettings;
   ShowInformation('Resize and copy completed');
 end;
 
 procedure TMainForm.QuitButtonClick(Sender: TObject);
 begin
-	Close;
+  Close;
 end;
 
 end.
